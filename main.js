@@ -104,4 +104,25 @@ buscarMatches.onclick = () => {
       }
     }
   }
+  for (let j = 0; j < listaDeFrutas.length; j++) {
+    for (let i = 0; i < listaDeFrutas[j].length; i++) {
+      if (
+        listaDeFrutas[j][i] === listaDeFrutas[j][i] &&
+        listaDeFrutas[j][i] === listaDeFrutas[j + 2][i]
+      ) {
+        const divVertical = document.querySelector(
+          `div[data-x="${i}"][data-y="${j}"]`
+        );
+        divVertical.style.backgroundColor = "red";
+        const divVerticalDos = document.querySelector(
+          `div[data-x="${i}"][data-y="${j + 1}"]`
+        );
+        divVerticalDos.style.backgroundColor = "red";
+        const divVerticalTres = document.querySelector(
+          `div[data-x="${i}"][data-y="${j + 2}"]`
+        );
+        divVerticalTres.style.backgroundColor = "red";
+      }
+    }
+  }
 };
