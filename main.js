@@ -4,8 +4,11 @@ const botonMedio = document.getElementById("medio");
 const botonDificil = document.getElementById("dificil");
 const nuevoJuego = document.getElementById("nuevo-juego");
 const reiniciarJuego = document.getElementById("reiniciar-juego");
+const buscarMatches = document.getElementById("buscar-matches");
 
-const items = ["🍉", "🍐", "🍌", "🍇", "🍎", "🍊", "🍑", "🥥", "🍒", "🍋"];
+let items = ["🍉", "🍐", "🍌", "🍇", "🍎", "🍊", "🍑", "🥥", "🍒", "🍋"];
+let listaDeFrutas = [];
+let frutas = "";
 
 const obtenerNumeroAlAzar = (items) => {
   let largo = items.length;
@@ -19,16 +22,23 @@ const crearGrilla = (ancho, alto) => {
   const anchoDeGrilla = 50 * ancho;
   grilla.style.width = `${anchoDeGrilla}px`;
 
-  const listaDeFrutas = [];
-
-  for (let i = 0; i < alto * ancho; i++) {
-    listaDeFrutas[i] = obtenerFrutaAlAzar(items);
+  for (let i = 0; i < ancho; i++) {
+    listaDeFrutas[i] = [];
+    for (let j = 0; j < alto; j++) {
+      listaDeFrutas[i][j] = obtenerFrutaAlAzar(items);
+    }
   }
 
   grilla.innerHTML = "";
   for (let i = 0; i < listaDeFrutas.length; i++) {
-    grilla.innerHTML += `<div>${listaDeFrutas[i]}</div>`;
+    for (let j = 0; j < listaDeFrutas[i].length; j++) {
+      frutas = obtenerFrutaAlAzar(items);
+      listaDeFrutas[i][j] = frutas;
+      grilla.innerHTML += `<div data-x="${i}" data-y="${j}"> ${frutas}</div>`;
+    }
   }
+
+  return grilla;
 };
 
 const ocultarBotones = () => {
@@ -71,5 +81,27 @@ reiniciarJuego.onclick = () => {
     crearGrilla(8, 8);
   } else if (reiniciarJuego.classList.contains("dificil")) {
     crearGrilla(10, 10);
+  }
+};
+
+buscarMatches.onclick = () => {
+  for (let i = 0; i < listaDeFrutas.length; i++) {
+    for (let j = 0; j < listaDeFrutas[i].length; j++) {
+      if (
+        listaDeFrutas[i][j] === listaDeFrutas[i][j + 1] &&
+        listaDeFrutas[i][j + 1] === listaDeFrutas[i][j + 2]
+      ) {
+        const div = document.querySelector(`div[data-x="${i}"][data-y="${j}"]`);
+        div.style.backgroundColor = "yellow";
+        const divDos = document.querySelector(
+          `div[data-x="${i}"][data-y="${j + 1}"]`
+        );
+        divDos.style.backgroundColor = "yellow";
+        const divTres = document.querySelector(
+          `div[data-x="${i}"][data-y="${j + 2}"]`
+        );
+        divTres.style.backgroundColor = "yellow";
+      }
+    }
   }
 };
